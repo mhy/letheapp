@@ -16,7 +16,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,7 +29,7 @@ import com.hiphople.letheapp.webview.LEWebChromeClient;
 import com.hiphople.letheapp.webview.LEWebViewClient;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
@@ -51,6 +53,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //register the listener for the buttons
+        Button btnBack = (Button)findViewById(R.id.btnBack);
+        Button btnRefresh = (Button)findViewById(R.id.btnRefresh);
+        Button btnForward = (Button)findViewById(R.id.btnForward);
+        btnBack.setOnClickListener(this);
+        btnRefresh.setOnClickListener(this);
+        btnForward.setOnClickListener(this);
 
         //setup for webView
         mWebView = (WebView)findViewById(R.id.webView);
@@ -148,6 +158,24 @@ public class MainActivity extends AppCompatActivity
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int btnId = v.getId();
+        switch(btnId){
+            case R.id.btnBack:
+                if(mWebView.canGoBack())
+                    mWebView.goBack();
+                break;
+            case R.id.btnForward:
+                if(mWebView.canGoForward())
+                    mWebView.goForward();
+                break;
+            case R.id.btnRefresh:
+                mWebView.reload();
+                break;
+        }
     }
 
     /**
