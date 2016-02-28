@@ -15,6 +15,7 @@ import com.hiphople.letheapp.MainActivity;
 import com.hiphople.letheapp.R;
 
 /**
+ * TODO write javadoc
  * Created by MHY on 2/27/16.
  */
 public class GCMListenerService extends GcmListenerService{
