@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private WebView mWebView;
+    private LEWebChromeClient mLeWcClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,8 @@ public class MainActivity extends AppCompatActivity
         //setup for webView
         mWebView = (WebView)findViewById(R.id.webView);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setWebChromeClient(new LEWebChromeClient());
+        mLeWcClient = new LEWebChromeClient(this);
+        mWebView.setWebChromeClient(mLeWcClient);
         mWebView.setWebViewClient(new LEWebViewClient());
         mWebView.loadUrl(URL_HIPHOPLE);
 
@@ -99,11 +103,19 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(LePreferences.REGISTRATION_COMPLETE));
+        if(mWebView != null){
+            mWebView.onResume();
+            mWebView.resumeTimers();
+        }
     }
 
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        if(mWebView != null){
+            mWebView.onPause();
+            mWebView.pauseTimers();
+        }
         super.onPause();
     }
 
@@ -152,7 +164,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            if(mWebView.canGoBack()){
+            /**
+             * if full-screen video is playing, back button will only escape the full screen mode,
+             * not go back to previous page.
+             */
+            if(mLeWcClient.closeCustomViewContainer()){
+                return false;
+            }else if(mWebView.canGoBack()){
                 mWebView.goBack();
                 return false;
             }
@@ -176,6 +194,12 @@ public class MainActivity extends AppCompatActivity
                 mWebView.reload();
                 break;
         }
+    }
+
+    //to make a video clip keep playing when there's an orientation change
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     /**

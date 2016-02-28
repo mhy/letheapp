@@ -23,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar" android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar" android:configChanges="screenSize|orientation"
+            android:hardwareAccelerated="true" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
