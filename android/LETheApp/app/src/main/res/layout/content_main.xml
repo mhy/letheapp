@@ -11,6 +11,7 @@
         android:id="@+id/customViewContainer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="#000"
         android:visibility="gone"/>
 
     <WebView

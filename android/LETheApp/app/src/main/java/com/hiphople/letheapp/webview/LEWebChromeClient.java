@@ -66,7 +66,6 @@ public class LEWebChromeClient extends WebChromeClient{
     public boolean closeCustomViewContainer(){
         boolean returnValue = false;
         if(mCustomView != null){
-            Log.d(TAG, "DDDDDDIEJFEJFOIWJFLKSJDE");
             onHideCustomView();
             returnValue = true;
         }
