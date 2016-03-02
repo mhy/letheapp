@@ -14,6 +14,13 @@
         android:background="#000"
         android:visibility="gone"/>
 
+    <ProgressBar android:id="@+id/progressBar"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+        android:visibility="gone"
+        android:progressDrawable="@drawable/progress_bar"
+        android:layout_width="fill_parent" android:layout_height="2dp"
+        android:layout_gravity="top" android:max="100" />
+
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"

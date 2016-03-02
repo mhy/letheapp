@@ -1,11 +1,11 @@
 package com.hiphople.letheapp.webview;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.hiphople.letheapp.R;
 
@@ -15,16 +15,16 @@ import com.hiphople.letheapp.R;
  */
 public class LEWebChromeClient extends WebChromeClient{
     private static final String TAG = "LEWebChromeClient";
-    private Activity mAct;
     private WebView mWebView;
     private View mCustomView;
     private FrameLayout mCustomViewContainer;
+    private ProgressBar mProgBar;
     private WebChromeClient.CustomViewCallback mCvCallBack;
 
     public LEWebChromeClient(Activity activity){
-        mAct = activity;
-        mWebView = (WebView)mAct.findViewById(R.id.webView);
-        mCustomViewContainer = (FrameLayout)mAct.findViewById(R.id.customViewContainer);
+        mWebView = (WebView)activity.findViewById(R.id.webView);
+        mProgBar = (ProgressBar)activity.findViewById(R.id.progressBar);
+        mCustomViewContainer = (FrameLayout)activity.findViewById(R.id.customViewContainer);
     }
 
     @Override
@@ -57,6 +57,12 @@ public class LEWebChromeClient extends WebChromeClient{
         mCvCallBack.onCustomViewHidden();
 
         mCustomView = null;
+    }
+
+    @Override
+    public void onProgressChanged(WebView view, int newProgress) {
+        super.onProgressChanged(view, newProgress);
+        mProgBar.setProgress(newProgress);
     }
 
     /**

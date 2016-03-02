@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         mWebView.getSettings().setJavaScriptEnabled(true);
         mLeWcClient = new LEWebChromeClient(this);
         mWebView.setWebChromeClient(mLeWcClient);
-        mWebView.setWebViewClient(new LEWebViewClient());
+        mWebView.setWebViewClient(new LEWebViewClient(this));
         mWebView.loadUrl(URL_HIPHOPLE);
 
         //setup for GCM
