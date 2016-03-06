@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         if(mWebView != null){
             mWebView.onResume();
             mWebView.resumeTimers();
+            mLeWcClient.hideSystemUI();
         }
     }
 
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity
         if(mWebView != null){
             mWebView.onPause();
             mWebView.pauseTimers();
+            mLeWcClient.showSystemUI();
         }
         super.onPause();
     }
