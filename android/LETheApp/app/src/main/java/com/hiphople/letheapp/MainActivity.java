@@ -26,6 +26,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.hiphople.letheapp.util.GCMRegistrationIntentService;
 import com.hiphople.letheapp.util.LePreferences;
+import com.hiphople.letheapp.util.LeServerMessage;
 import com.hiphople.letheapp.webview.LEWebChromeClient;
 import com.hiphople.letheapp.webview.LEWebViewClient;
 
@@ -102,6 +103,13 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(LePreferences.REGISTRATION_COMPLETE));
+
+        //receive document_srl from push notification only if it exists
+        String docSrl = getIntent().getStringExtra(LeServerMessage.DOCUMENT_SRL);
+        if(docSrl != null) {
+            openPageFromPushNoti(docSrl);
+        }
+
         if(mWebView != null){
             mWebView.onResume();
             mWebView.resumeTimers();
@@ -112,6 +120,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+
         if(mWebView != null){
             mWebView.onPause();
             mWebView.pauseTimers();
@@ -222,5 +231,12 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
         return true;
+    }
+
+    private void openPageFromPushNoti(String docSrl){
+        Log.d(TAG, "received document_srl : " + docSrl);
+        getIntent().removeExtra(LeServerMessage.DOCUMENT_SRL);
+        mWebView.loadUrl(URL_HIPHOPLE + "/6608583"); //TODO remove this hard-coded line; THIS is just for test
+        //mWebView.loadUrl(URL_HIPHOPLE + "/" + docSrl); //TODO after removing the line above, make this line alive!
     }
 }

@@ -30,11 +30,12 @@ public class GCMListenerService extends GcmListenerService{
      */
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
         String title = data.getString("title");
+        String rawMessage = data.getString("message");
+        LeServerMessage message = new LeServerMessage(rawMessage);
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Title: " + title);
-        Log.d(TAG, "Message: " + message);
+        Log.d(TAG, "Message: " + rawMessage);
 
         if (from.startsWith("/topics/")) {
             // message received from some topic.
@@ -63,9 +64,10 @@ public class GCMListenerService extends GcmListenerService{
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String title, String message) {
+    private void sendNotification(String title, LeServerMessage message) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+        intent.putExtra(LeServerMessage.DOCUMENT_SRL, message.getDocSrl()); //put document_srl
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
@@ -73,7 +75,7 @@ public class GCMListenerService extends GcmListenerService{
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_ic_notification)
                 .setContentTitle(title)
-                .setContentText(message)
+                .setContentText(makeMessage(message.getTitle()))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
@@ -82,5 +84,9 @@ public class GCMListenerService extends GcmListenerService{
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private String makeMessage(String title){
+        return getText(R.string.push_noti_msg) + " " + title;
     }
 }
