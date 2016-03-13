@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Subscription">
+        <CheckBoxPreference
+            android:key="board1"
+            android:title="Board1"
+            android:summary="Get Push Notification for Board1"
+            android:dialogTitle="Get Push Notification for Board1">
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:key="board2"
+            android:title="Board2"
+            android:summary="Get Push Notification for Board2"
+            android:dialogTitle="Get Push Notification for Board2">
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:key="board3"
+            android:title="Board3"
+            android:summary="Get Push Notification for Board3"
+            android:dialogTitle="Get Push Notification for Board3">
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Remember my info (TODO)">
+        <CheckBoxPreference
+            android:key="userSavingCred"
+            android:title="Save my credential"
+            android:summary="Save my credential on this app"
+            android:dialogTitle="Save my credential on this app">
+        </CheckBoxPreference>
+        <EditTextPreference
+            android:key="userId"
+            android:title="ID"
+            android:enabled="false"
+            android:summary="Enter your ID to save your login info"
+            android:dialogTitle="Enter your ID to save your login info">
+        </EditTextPreference>
+        <EditTextPreference
+            android:key="userPw"
+            android:title="Password"
+            android:password="true"
+            android:enabled="false"
+            android:summary="Enter your password to save your login info"
+            android:dialogTitle="Enter your password to save your login info">
+        </EditTextPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

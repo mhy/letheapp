@@ -21,7 +21,6 @@ public class GCMRegistrationIntentService extends IntentService {
 
     private static final String TAG = "GCMRegIntentService";
     private static final String[] TOPICS = {"global"};
-    private static final String SENDER_ID = "351446186762";
 
     public GCMRegistrationIntentService() {
         super(TAG);
