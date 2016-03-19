@@ -11,6 +11,7 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.hiphople.letheapp.R;
+import com.hiphople.letheapp.SettingsActivity;
 
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ import java.io.IOException;
 public class GCMRegistrationIntentService extends IntentService {
 
     private static final String TAG = "GCMRegIntentService";
-    private static final String[] TOPICS = {"global"};
+    private static final String[] TOPICS = {"board1", "board2", "board3"};
 
     public GCMRegistrationIntentService() {
         super(TAG);
@@ -80,9 +81,19 @@ public class GCMRegistrationIntentService extends IntentService {
      * @throws IOException if unable to reach the GCM PubSub service
      */
     private void subscribeTopics(String token) throws IOException {
+        SharedPreferences pref = getSharedPreferences(
+                getPackageName() + SettingsActivity.DEFAULT_PREF_NAME_SUFFIX,
+                MODE_PRIVATE);
+
         GcmPubSub pubSub = GcmPubSub.getInstance(this);
         for (String topic : TOPICS) {
-            pubSub.subscribe(token, "/topics/" + topic, null);
+            if (pref.getBoolean(topic, false)) {
+                Log.d(TAG, "subscribe topic : " + topic);
+                pubSub.subscribe(token, "/topics/" + topic, null);
+            }else{
+                Log.d(TAG, "unsubscribe topic : " + topic);
+                pubSub.unsubscribe(token, "/topics/" + topic);
+            }
         }
     }
 }
