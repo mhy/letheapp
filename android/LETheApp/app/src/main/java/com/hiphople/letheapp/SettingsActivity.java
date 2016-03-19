@@ -4,10 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 
 import com.hiphople.letheapp.util.GCMRegistrationIntentService;
-
-import java.util.List;
 
 /**
  * TODO write javadoc
@@ -25,7 +24,11 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preference);  //TODO used deprecated method; replace THIS!
+        getFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content,
+                        new SettingsPreferenceFragment()).commit();
+
         mPref = getSharedPreferences(
                 getPackageName() + DEFAULT_PREF_NAME_SUFFIX,
                 MODE_PRIVATE);
@@ -53,8 +56,11 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    @Override
-    public void onBuildHeaders(List<Header> target) {
-        super.onBuildHeaders(target);
+    public static class SettingsPreferenceFragment extends  PreferenceFragment {
+        @Override
+        public void onCreate(final Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.preference);
+        }
     }
 }
