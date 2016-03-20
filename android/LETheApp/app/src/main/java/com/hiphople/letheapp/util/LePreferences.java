@@ -8,4 +8,5 @@ public class LePreferences {
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String DEFAULT_PREF_NAME_SUFFIX = "_preferences";
 }

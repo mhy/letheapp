@@ -82,7 +82,7 @@ public class GCMRegistrationIntentService extends IntentService {
      */
     private void subscribeTopics(String token) throws IOException {
         SharedPreferences pref = getSharedPreferences(
-                getPackageName() + SettingsActivity.DEFAULT_PREF_NAME_SUFFIX,
+                getPackageName() + LePreferences.DEFAULT_PREF_NAME_SUFFIX,
                 MODE_PRIVATE);
 
         GcmPubSub pubSub = GcmPubSub.getInstance(this);
