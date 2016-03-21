@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -142,16 +143,19 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Intent intent = new Intent();
         if (id == R.id.nav_settings) {
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
+            intent.setClass(this, SettingsActivity.class);
         } else if (id == R.id.nav_copy_url) {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, mWebView.getUrl());
-            sendIntent.setType("text/plain");
-            startActivity(sendIntent);
+            intent.setAction(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_TEXT, mWebView.getUrl());
+            intent.setType("text/plain");
+        } else if (id == R.id.nav_open_in) {
+            String url = mWebView.getUrl();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
         }
+        startActivity(intent);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

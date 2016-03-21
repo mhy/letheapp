@@ -8,6 +8,8 @@
         <menu>
             <item android:id="@+id/nav_copy_url" android:icon="@android:drawable/ic_menu_share"
                 android:title="Share" />
+            <item android:id="@+id/nav_open_in" android:icon="@android:drawable/ic_menu_set_as"
+                android:title="Open in other browsers" />
         </menu>
     </item>
 
