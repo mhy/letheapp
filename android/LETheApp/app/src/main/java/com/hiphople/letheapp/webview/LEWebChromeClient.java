@@ -1,32 +1,40 @@
 package com.hiphople.letheapp.webview;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.hiphople.letheapp.R;
+import com.hiphople.letheapp.util.LeConstants;
 
 /**
  * TODO write javadoc
  * Created by MHY on 2/28/16.
  */
 public class LEWebChromeClient extends WebChromeClient{
-    private static final String TAG = "LEWebChromeClient";
+    //private static final String TAG = "LEWebChromeClient";
+    private Activity mAct;
     private WebView mWebView;
     private View mCustomView;
     private FrameLayout mCustomViewContainer;
     private ProgressBar mProgBar;
     private WebChromeClient.CustomViewCallback mCvCallBack;
     private Window mWindow;
+    private ValueCallback<Uri> mUploadMsg;
+    private ValueCallback<Uri[]> mFilePathCallback;
 
     private boolean isPlaying;
 
     public LEWebChromeClient(Activity activity){
+        mAct = activity;
         mWebView = (WebView)activity.findViewById(R.id.webView);
         mProgBar = (ProgressBar)activity.findViewById(R.id.progressBar);
         mCustomViewContainer = (FrameLayout)activity.findViewById(R.id.customViewContainer);
@@ -78,6 +86,25 @@ public class LEWebChromeClient extends WebChromeClient{
         mProgBar.setProgress(newProgress);
     }
 
+    //This is a callback method for versions from [API level 16] to [API level 18]
+    @SuppressWarnings("unused")
+    public void openFileChooser(ValueCallback<Uri> uploadMsg,
+                                String acceptType,
+                                String capture) {
+        mUploadMsg = uploadMsg;
+        startFileChooserActivity(LeConstants.FILE_CHOOSER_REQUEST_CODE_BEFORE_19);
+    }
+
+    //This is a callback method for versions after [API level 21]
+    @Override
+    public boolean onShowFileChooser(WebView webView,
+                                     ValueCallback<Uri[]> filePathCallback,
+                                     FileChooserParams fileChooserParams) {
+        mFilePathCallback = filePathCallback;
+        startFileChooserActivity(LeConstants.FILE_CHOOSER_REQUEST_CODE_AFTER_21);
+        return true;
+    }
+
     /**
      *
      * @return true if Custom View is closed successfully
@@ -118,5 +145,46 @@ public class LEWebChromeClient extends WebChromeClient{
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
             mWindow.getDecorView().setSystemUiVisibility(uiOptions);
         }
+    }
+
+    /**
+     * get a photo to attach from File Chooser (for API level 21 ~)
+     */
+    public void getDataFromFileChooser(Uri[] resultValue){
+        if(mFilePathCallback!=null) {
+            mFilePathCallback.onReceiveValue(resultValue);
+            mFilePathCallback = null;
+        }
+    }
+
+    /**
+     * get a photo to attach from File Chooser (for API level 16 ~ API level 18)
+     */
+    public void getDataFromFileChooser(Uri resultValue){
+        if(mUploadMsg!=null) {
+            mUploadMsg.onReceiveValue(resultValue);
+            mFilePathCallback = null;
+        }
+    }
+
+    /**
+     * clean up after File Chooser is closed without attaching anything
+     */
+    public void cleanUpFileChooser(){
+        if(mFilePathCallback != null) {
+            mFilePathCallback.onReceiveValue(null);
+            mFilePathCallback = null;
+        }
+        if(mUploadMsg != null) {
+            mUploadMsg.onReceiveValue(null);
+            mUploadMsg = null;
+        }
+    }
+
+    private void startFileChooserActivity(int reqCode){
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType("image/*");
+        mAct.startActivityForResult(Intent.createChooser(i, "File Chooser"), reqCode);
     }
 }

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -20,7 +19,7 @@ import com.hiphople.letheapp.R;
  * Created by MHY on 2/28/16.
  */
 public class LEWebViewClient extends WebViewClient{
-    private static final String TAG = "LEWebViewClient";
+    //private static final String TAG = "LEWebViewClient";
     private static final String ERROR_PAGE = "file:///android_asset/error.html";
     private static final String PATTERN_BOARD_WRITE = ".*dispBoardWrite.*";
     private static final String[] RELEASE_OF_BUG = {"4.4", "4.4.1", "4.4.2"};

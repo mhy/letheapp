@@ -7,7 +7,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
 import com.hiphople.letheapp.util.GCMRegistrationIntentService;
-import com.hiphople.letheapp.util.LePreferences;
+import com.hiphople.letheapp.util.LeConstants;
 
 /**
  * TODO write javadoc
@@ -30,7 +30,7 @@ public class SettingsActivity extends PreferenceActivity {
                         new SettingsPreferenceFragment()).commit();
 
         mPref = getSharedPreferences(
-                getPackageName() + LePreferences.DEFAULT_PREF_NAME_SUFFIX,
+                getPackageName() + LeConstants.DEFAULT_PREF_NAME_SUFFIX,
                 MODE_PRIVATE);
 
         isBoard1CheckedBefore = mPref.getBoolean("board1", false);

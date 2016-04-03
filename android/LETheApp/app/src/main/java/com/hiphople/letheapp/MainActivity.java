@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.hiphople.letheapp.util.GCMRegistrationIntentService;
-import com.hiphople.letheapp.util.LePreferences;
+import com.hiphople.letheapp.util.LeConstants;
 import com.hiphople.letheapp.util.LeServerMessage;
 import com.hiphople.letheapp.webview.LEWebChromeClient;
 import com.hiphople.letheapp.webview.LEWebViewClient;
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
 //                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 //        drawer.setDrawerListener(toggle);
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences
-                        .getBoolean(LePreferences.SENT_TOKEN_TO_SERVER, false);
+                        .getBoolean(LeConstants.SENT_TOKEN_TO_SERVER, false);
 
                 //for TEST
                 if (sentToken) {
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume(){
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(LePreferences.REGISTRATION_COMPLETE));
+                new IntentFilter(LeConstants.REGISTRATION_COMPLETE));
 
         //receive document_srl from push notification only if it exists
         String docSrl = getIntent().getStringExtra(LeServerMessage.DOCUMENT_SRL);
@@ -160,6 +160,34 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode){
+            case LeConstants.FILE_CHOOSER_REQUEST_CODE_BEFORE_19:
+            case LeConstants.FILE_CHOOSER_REQUEST_CODE_AFTER_21:
+                handleFileChooser(requestCode, resultCode, data);
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
+
+    private void handleFileChooser(int reqCode, int resCode, Intent data){
+        if(resCode == RESULT_OK && data != null){
+            if(reqCode == LeConstants.FILE_CHOOSER_REQUEST_CODE_AFTER_21){
+                Uri result[] = new Uri[1];
+                result[0] = data.getData();
+                mLeWcClient.getDataFromFileChooser(result);
+            }else{ // else if (reqCode == LeConstants.FILE_CHOOSER_REQUEST_CODE_BEFORE_19)
+                Uri result = data.getData();
+                mLeWcClient.getDataFromFileChooser(result);
+            }
+        }else{
+            mLeWcClient.cleanUpFileChooser();
+        }
     }
 
     @Override
