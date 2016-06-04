@@ -8,12 +8,17 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="push_noti_msg">Check out the new post!</string>
     <string name="specific_kitkat_error_title">Warning</string>
-    <string name="specific_kitkat_error_meessage">Android version \'4.4\', \'4.4.1\' and \'4.4.2\' has a bug
+    <string name="specific_kitkat_error_message">Android version \'4.4\', \'4.4.1\' and \'4.4.2\' has a bug
         so that you cannot post on the board with attaching files.
         \nDo you want to proceed anyway?
         \n(Otherwise, use Chrome app)</string>
     <string name="token_error_message">An error occurred while communicating with server.
         Please try running the app again.</string>
+
+    <string name="bookmark_change_title">Change Title</string>
+    <string name="bookmark_delete">Delete</string>
+    <string name="bookmark_cancel">Cancel</string>
+    <string name="bookmark_title_cannot_be_empty">Title cannot be empty</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

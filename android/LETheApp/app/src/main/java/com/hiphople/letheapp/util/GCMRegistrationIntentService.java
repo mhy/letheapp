@@ -15,6 +15,7 @@ import com.hiphople.letheapp.R;
 import java.io.IOException;
 
 /**
+ *
  * Created by MHY on 2/27/16.
  */
 public class GCMRegistrationIntentService extends IntentService {

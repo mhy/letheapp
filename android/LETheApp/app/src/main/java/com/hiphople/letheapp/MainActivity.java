@@ -25,6 +25,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.hiphople.letheapp.bookmark.BookmarkActivity;
+import com.hiphople.letheapp.bookmark.BookmarkContract;
+import com.hiphople.letheapp.bookmark.BookmarkManager;
 import com.hiphople.letheapp.util.GCMRegistrationIntentService;
 import com.hiphople.letheapp.util.LeConstants;
 import com.hiphople.letheapp.util.LeServerMessage;
@@ -62,9 +65,11 @@ public class MainActivity extends AppCompatActivity
         Button btnBack = (Button)findViewById(R.id.btnBack);
         Button btnRefresh = (Button)findViewById(R.id.btnRefresh);
         Button btnForward = (Button)findViewById(R.id.btnForward);
+        Button btnFav = (Button)findViewById(R.id.btnBookmark);
         btnBack.setOnClickListener(this);
         btnRefresh.setOnClickListener(this);
         btnForward.setOnClickListener(this);
+        btnFav.setOnClickListener(this);
 
         //setup for webView
         mWebView = (WebView)findViewById(R.id.webView);
@@ -144,6 +149,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         Intent intent = new Intent();
+        int requestCode = LeConstants.NOT_USING_REQUEST_CODE;
         if (id == R.id.nav_settings) {
             intent.setClass(this, SettingsActivity.class);
         } else if (id == R.id.nav_copy_url) {
@@ -154,8 +160,11 @@ public class MainActivity extends AppCompatActivity
             String url = mWebView.getUrl();
             intent.setAction(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
+        } else if (id == R.id.nav_favorites) {
+            intent.setClass(this, BookmarkActivity.class);
+            requestCode = LeConstants.BOOKMARK_REQUEST_CODE;
         }
-        startActivity(intent);
+        startActivityForResult(intent, requestCode);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -168,6 +177,14 @@ public class MainActivity extends AppCompatActivity
             case LeConstants.FILE_CHOOSER_REQUEST_CODE_BEFORE_19:
             case LeConstants.FILE_CHOOSER_REQUEST_CODE_AFTER_21:
                 handleFileChooser(requestCode, resultCode, data);
+                break;
+            case LeConstants.BOOKMARK_REQUEST_CODE:
+                if(resultCode == RESULT_OK) {
+                    String url = data.getStringExtra(BookmarkContract.Bookmark.COLUMN_NAME_URL);
+                    if (url != null) {
+                        mWebView.loadUrl(url);
+                    }
+                }
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -227,6 +244,12 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.btnRefresh:
                 mWebView.reload();
+                break;
+            case R.id.btnBookmark:
+                BookmarkManager.getInstance(this)
+                        .manageBookmark(
+                                mWebView.getTitle(),
+                                mWebView.getUrl());
                 break;
         }
     }

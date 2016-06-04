@@ -45,8 +45,16 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="#F00"
-            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/btnBack"
             android:text="refresh"/>
+
+        <Button
+            android:id="@+id/btnBookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="#F00"
+            android:layout_toRightOf="@id/btnRefresh"
+            android:text="☆"/>
 
         <Button
             android:id="@+id/btnForward"

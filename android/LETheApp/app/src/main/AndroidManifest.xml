@@ -26,6 +26,7 @@
         <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar" android:configChanges="screenSize|orientation"
             android:hardwareAccelerated="true" />
         <activity android:name=".SettingsActivity" android:theme="@style/AppTheme" android:configChanges="screenSize|orientation" />
+        <activity android:name=".bookmark.BookmarkActivity" android:theme="@style/AppTheme.NoActionBar" android:configChanges="screenSize|orientation" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

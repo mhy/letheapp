@@ -12,4 +12,7 @@ public class LeConstants {
 
     public static final int FILE_CHOOSER_REQUEST_CODE_BEFORE_19 = 10;
     public static final int FILE_CHOOSER_REQUEST_CODE_AFTER_21 = 11;
+
+    public static final int NOT_USING_REQUEST_CODE = -1;
+    public static final int BOOKMARK_REQUEST_CODE = 333;
 }

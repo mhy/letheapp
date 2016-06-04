@@ -47,7 +47,7 @@ public class LEWebViewClient extends WebViewClient{
 
             if(isVersionOfBug){
                 AlertDialog.Builder builder = new AlertDialog.Builder(mAct);
-                builder.setMessage(R.string.specific_kitkat_error_meessage)
+                builder.setMessage(R.string.specific_kitkat_error_message)
                         .setTitle(R.string.specific_kitkat_error_title)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener(){
                             @Override
